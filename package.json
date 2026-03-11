@@ -2,32 +2,28 @@
   "name": "razorbook-reach-intake",
   "version": "1.0.0",
   "private": true,
-  "main": "expo-router/entry",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
-    "start": "expo start",
-    "build": "expo export -p web",
-    "android": "expo run:android",
-    "ios": "expo run:ios",
-    "web": "expo start --web",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "expo": "~54.0.0",
-    "expo-camera": "~16.0.0",
-    "expo-file-system": "~18.0.0",
-    "expo-router": "~5.0.0",
-    "expo-sharing": "~13.0.0",
-    "expo-sqlite": "~15.0.0",
-    "expo-status-bar": "~2.0.0",
-    "react": "19.0.0",
-    "react-native": "0.81.0",
-    "react-native-safe-area-context": "~5.0.0",
-    "react-native-screens": "~4.0.0"
+    "@supabase/supabase-js": "^2.57.4",
+    "clsx": "^2.1.1",
+    "next": "^15.3.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.26.0",
-    "@types/react": "~19.0.10",
-    "typescript": "~5.8.0"
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.2"
   }
 }
-

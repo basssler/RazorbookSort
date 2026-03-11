@@ -1,77 +1,96 @@
 # Razorbook Reach Intake
 
-Expo React Native TypeScript app for fast volunteer book intake. It scans ISBN barcodes with the phone camera, normalizes the ISBN, checks a local SQLite inventory, fetches metadata from Google Books with Open Library fallback, and saves everything locally for offline-first workflow after lookup.
+Mobile-first Next.js App Router app for nonprofit volunteers scanning donated books on phones.
 
-## Features
+Core workflow:
 
-- Home, Scanner, Confirm Book, Inventory List, and Book Detail/Edit screens
-- Camera ISBN scanning with duplicate handling
-- ISBN normalization for ISBN-10 and ISBN-13
-- Local storage with `expo-sqlite`
-- Metadata lookup from Google Books API, then Open Library fallback
-- CSV export from the local database
-- Seed data for first-run demo inventory
-- Large controls and low-friction UI for volunteer use
+`Select batch -> scan ISBN -> detect duplicate -> confirm minimal details -> save -> return to scanner`
 
-## Folder structure
+## Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Supabase
+- Browser camera scanning with `BarcodeDetector` when available
+
+## Pages
+
+- `/` Home Dashboard
+- `/scanner` Scanner
+- `/confirm` Confirm Book
+- `/inventory` Inventory List
+- `/edit/[id]` Edit Book
+
+## Data model
+
+Tables live in [supabase/schema.sql](C:/Users/maxba/Documents/GitHub/RazorbookSort/supabase/schema.sql).
+
+- `batches`
+- `books`
+
+`books` are intentionally lean:
+
+- `batch_id`
+- `isbn_10`
+- `isbn_13`
+- `normalized_isbn`
+- `title`
+- `authors`
+- `quantity`
+- `status`
+- `notes`
+
+## Project structure
 
 ```text
-app/                     Expo Router screens
-src/components/          Reusable UI and forms
-src/constants/           Theme values
-src/context/             App-level inventory state
-src/data/                Seed inventory records
-src/db/                  SQLite setup and queries
-src/hooks/               Shared hooks
-src/lib/                 ISBN, metadata, CSV, formatting helpers
-src/types/               Shared TypeScript models
+app/
+  api/                 Route handlers for batches, books, scan lookup, CSV export
+  scanner/             Scanner page
+  confirm/             Confirm page
+  inventory/           Inventory page
+  edit/[id]/           Edit page
+src/components/        UI shell, forms, scanner client
+src/lib/               Supabase, db queries, metadata lookup, ISBN utilities
+supabase/schema.sql    Minimal schema and starter batches
 ```
 
-## Setup
+## Local setup
 
 1. Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
-2. Start Expo:
+2. Create `.env.local` from `.env.example` and set:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+3. Run the SQL in [supabase/schema.sql](C:/Users/maxba/Documents/GitHub/RazorbookSort/supabase/schema.sql) against your Supabase project.
+
+4. Start the app:
 
 ```bash
-npm run start
+pnpm dev
 ```
 
-3. Open on a device or simulator:
+## Vercel
 
-- Android: press `a`
-- iOS: press `i`
-- Expo Go or development build: scan the QR code from the Expo terminal
+This repo now targets Vercel as a standard Next.js app. The project config is in [vercel.json](C:/Users/maxba/Documents/GitHub/RazorbookSort/vercel.json).
+
+Required Vercel environment variables:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
 ## Notes
 
-- Camera permission is required to scan ISBN barcodes.
-- Metadata fetch needs internet access at scan time. Saved inventory remains local in SQLite.
-- CSV export writes a file into Expo's document or cache directory and opens the share sheet when available.
-- Seed data is inserted only when the local `books` table is empty.
-
-## Data model
-
-Each book record stores:
-
-- `isbn_10`
-- `isbn_13`
-- `title`
-- `authors`
-- `publisher`
-- `published_date`
-- `categories`
-- `thumbnail_url`
-- `condition`
-- `audience_band`
-- `is_ar_likely`
-- `quantity`
-- `intake_batch`
-- `storage_location`
-- `notes`
-- `status`
-- `scanned_at`
+- Duplicate detection is scoped to `batch_id + normalized_isbn`.
+- The primary duplicate action is quantity increment.
+- Metadata lookup uses Google Books first and Open Library fallback.
+- CSV export is per batch through `/api/batches/[id]/export`.
+- If the browser does not support `BarcodeDetector`, volunteers can still use manual ISBN entry.
