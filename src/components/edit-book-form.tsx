@@ -9,7 +9,7 @@ import { Book } from "@/lib/app-types";
 
 export function EditBookForm({ book }: { book: Book }) {
   const router = useRouter();
-  const [title, setTitle] = useState(book.title);
+  const [title, setTitle] = useState(book.title ?? "");
   const [authors, setAuthors] = useState(book.authors ?? "");
   const [quantity, setQuantity] = useState(String(book.quantity));
   const [notes, setNotes] = useState(book.notes ?? "");

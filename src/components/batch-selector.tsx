@@ -1,34 +1,25 @@
 "use client";
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
 import { Batch } from "@/lib/app-types";
 import { SelectInput } from "@/components/ui/field";
 
 export function BatchSelector({
   batches,
   selectedBatchId,
+  onSelect,
 }: {
   batches: Batch[];
   selectedBatchId: string | null;
+  onSelect: (batch: Batch | null) => void;
 }) {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-
   return (
     <SelectInput
       value={selectedBatchId ?? ""}
       onChange={(event) => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (event.target.value) {
-          params.set("batchId", event.target.value);
-        } else {
-          params.delete("batchId");
-        }
-        router.replace(`${pathname}${params.toString() ? `?${params.toString()}` : ""}`);
+        onSelect(batches.find((batch) => batch.id === event.target.value) ?? null);
       }}
     >
+      <option value="">Select a batch</option>
       {batches.map((batch) => (
         <option key={batch.id} value={batch.id}>
           {batch.name}
@@ -37,4 +28,3 @@ export function BatchSelector({
     </SelectInput>
   );
 }
-

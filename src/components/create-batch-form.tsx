@@ -1,17 +1,19 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { FieldShell, TextArea, TextInput } from "@/components/ui/field";
+import { FieldShell, TextInput } from "@/components/ui/field";
+import { Batch } from "@/lib/app-types";
 
-export function CreateBatchForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export function CreateBatchForm({
+  onCreated,
+}: {
+  onCreated: (batch: Batch) => void;
+}) {
   const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-  const [notes, setNotes] = useState("");
+  const [sourceLocation, setSourceLocation] = useState("");
+  const [status, setStatus] = useState("open");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,8 +28,8 @@ export function CreateBatchForm() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: String(formData.get("name") ?? ""),
-        location: String(formData.get("location") ?? ""),
-        notes: String(formData.get("notes") ?? ""),
+        sourceLocation: String(formData.get("sourceLocation") ?? ""),
+        status: String(formData.get("status") ?? "open"),
       }),
     });
 
@@ -39,13 +41,10 @@ export function CreateBatchForm() {
       return;
     }
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("batchId", payload.batch.id);
     setName("");
-    setLocation("");
-    setNotes("");
-    router.replace(`/?${params.toString()}`);
-    router.refresh();
+    setSourceLocation("");
+    setStatus("open");
+    onCreated(payload.batch as Batch);
   }
 
   return (
@@ -59,16 +58,16 @@ export function CreateBatchForm() {
           placeholder="Friday donation drive"
         />
       </FieldShell>
-      <FieldShell label="Location">
+      <FieldShell label="Source location">
         <TextInput
-          name="location"
-          value={location}
-          onChange={(event) => setLocation(event.target.value)}
+          name="sourceLocation"
+          value={sourceLocation}
+          onChange={(event) => setSourceLocation(event.target.value)}
           placeholder="South warehouse"
         />
       </FieldShell>
-      <FieldShell label="Notes">
-        <TextArea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Optional volunteer note" />
+      <FieldShell label="Status">
+        <TextInput name="status" value={status} onChange={(event) => setStatus(event.target.value)} placeholder="open" />
       </FieldShell>
       {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
       <Button disabled={saving} type="submit">

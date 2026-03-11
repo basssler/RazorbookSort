@@ -7,17 +7,15 @@
 }
 
 html {
-  background: #f7f2e7;
+  background: #f7f7f5;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top right, rgba(195, 95, 36, 0.12), transparent 24rem),
-    linear-gradient(180deg, #f8f3e9 0%, #f5eddc 100%);
-  color: #1f2a1f;
-  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f7f5;
+  color: #1c1917;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 a {
@@ -37,4 +35,3 @@ video {
   height: 100%;
   object-fit: cover;
 }
-

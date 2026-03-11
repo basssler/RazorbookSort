@@ -14,10 +14,13 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const batch = await createBatch(body);
+    const batch = await createBatch({
+      name: String(body.name ?? ""),
+      sourceLocation: String(body.sourceLocation ?? ""),
+      status: String(body.status ?? "open"),
+    });
     return NextResponse.json({ batch });
   } catch (error) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to create batch." }, { status: 400 });
   }
 }
-
