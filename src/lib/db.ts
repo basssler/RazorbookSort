@@ -1,55 +1,34 @@
-import { Batch, Book, LookupResponse } from "@/lib/app-types";
-import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { LookupResponse } from "@/lib/app-types";
+import { createBatch, getBatchById, listBatches } from "@/services/batches";
+import { getBookById, listBooksByBatch, updateBookById } from "@/services/books";
+import { Book } from "@/types";
 
-type CreateBatchInput = {
-  name: string;
-  sourceLocation?: string;
-  status?: string;
-};
+export { createBatch, getBatchById, listBatches };
 
-export async function listBatches() {
-  const supabase = createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from("batches")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    throw new Error(error.message);
+export async function listBooks(options: {
+  batchId?: string | null;
+  search?: string;
+  binLabel?: string;
+  intakeStatus?: string;
+}) {
+  if (!options.batchId) {
+    return [];
   }
 
-  return (data ?? []) as Batch[];
+  return listBooksByBatch({
+    batchId: options.batchId,
+    search: options.search,
+    binLabel: options.binLabel,
+    intakeStatus: options.intakeStatus,
+  });
 }
 
-export async function createBatch(input: CreateBatchInput) {
-  const supabase = createSupabaseServerClient();
-  const { data, error } = await supabase
-    .from("batches")
-    .insert({
-      name: input.name.trim(),
-      source_location: input.sourceLocation?.trim() || null,
-      status: input.status?.trim() || "open",
-    })
-    .select("*")
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
-  }
-
-  return data as Batch;
-}
-
-export async function listBooks(_: { batchId?: string | null; search?: string }) {
-  throw new Error("Inventory list is not implemented until milestone 3.");
-}
-
-export async function getBook(_: string): Promise<Book> {
-  throw new Error("Book detail is not implemented until milestone 3.");
+export async function getBook(id: string) {
+  return getBookById(id);
 }
 
 export async function lookupIsbnForBatch(_: string, __: string): Promise<LookupResponse> {
-  throw new Error("Scanner lookup is not implemented until milestone 4.");
+  throw new Error("Duplicate lookup is not implemented until milestone 5.");
 }
 
 export async function incrementBookQuantity(_: string): Promise<Book> {
@@ -60,8 +39,34 @@ export async function createBook(_: unknown): Promise<Book> {
   throw new Error("Book creation is not implemented until milestone 6.");
 }
 
-export async function updateBook(_: unknown): Promise<Book> {
-  throw new Error("Book editing is not implemented until milestone 3.");
+export async function updateBook(input: {
+  id: string;
+  isbn10: string | null;
+  isbn13: string | null;
+  title: string;
+  authors: string;
+  publisher?: string;
+  publishedYear?: number | null;
+  thumbnailUrl?: string;
+  binLabel?: string;
+  intakeStatus?: string;
+  quantity: number;
+  notes: string;
+}) {
+  return updateBookById({
+    id: input.id,
+    isbn10: input.isbn10,
+    isbn13: input.isbn13,
+    title: input.title,
+    authors: input.authors,
+    publisher: input.publisher ?? "",
+    publishedYear: input.publishedYear ?? null,
+    thumbnailUrl: input.thumbnailUrl ?? "",
+    binLabel: input.binLabel ?? "",
+    intakeStatus: input.intakeStatus ?? "",
+    quantity: input.quantity,
+    notes: input.notes,
+  });
 }
 
 export async function exportBatchCsv(_: string): Promise<{ filename: string; content: string }> {

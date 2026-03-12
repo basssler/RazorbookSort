@@ -8,6 +8,8 @@ export async function GET(request: Request) {
     const books = await listBooks({
       batchId: searchParams.get("batchId"),
       search: searchParams.get("search") ?? "",
+      binLabel: searchParams.get("binLabel") ?? "",
+      intakeStatus: searchParams.get("intakeStatus") ?? "",
     });
     return NextResponse.json({ books });
   } catch (error) {
@@ -24,4 +26,3 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error instanceof Error ? error.message : "Unable to save book." }, { status: 400 });
   }
 }
-

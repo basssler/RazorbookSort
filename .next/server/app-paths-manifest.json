@@ -1,3 +1,6 @@
 {
+  "/api/books/route": "app/api/books/route.js",
+  "/inventory/page": "app/inventory/page.js",
+  "/scan/page": "app/scan/page.js",
   "/page": "app/page.js"
 }
