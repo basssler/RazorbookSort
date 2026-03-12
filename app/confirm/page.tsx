@@ -19,7 +19,7 @@ export default async function ConfirmPage({
   const normalizedIsbn = params.isbn13 ?? params.isbn10 ?? params.isbn ?? "";
 
   return (
-    <AppShell currentPath="/scan" pageTitle="Confirm Book" showBack>
+    <AppShell currentPath="/scan" pageTitle="Confirm Book" showBack hideHeaderActions>
       <ActiveBatchGuard>
         {!params.batchId || !normalizedIsbn ? (
           <div className="flex flex-col items-center gap-4 p-8 text-center">

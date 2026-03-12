@@ -1,8 +1,8 @@
 {
-  "/api/books/route": "app/api/books/route.js",
+  "/api/metadata/route": "app/api/metadata/route.js",
   "/page": "app/page.js",
   "/scan/page": "app/scan/page.js",
-  "/inventory/page": "app/inventory/page.js",
   "/confirm/page": "app/confirm/page.js",
+  "/inventory/page": "app/inventory/page.js",
   "/books/[id]/edit/page": "app/books/[id]/edit/page.js"
 }

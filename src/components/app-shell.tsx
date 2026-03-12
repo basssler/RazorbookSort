@@ -18,6 +18,8 @@ type AppShellProps = {
   headerAction?: ReactNode;
   /** If true, the bottom nav is hidden (e.g. scanner full-screen mode). */
   hideNav?: boolean;
+  /** If true, the header right-side icons (notification + profile) are hidden. */
+  hideHeaderActions?: boolean;
 };
 
 export function AppShell({
@@ -27,6 +29,7 @@ export function AppShell({
   showBack = false,
   headerAction,
   hideNav = false,
+  hideHeaderActions = false,
 }: AppShellProps) {
   const router = useRouter();
   const { activeBatch, hasHydrated } = useActiveBatch();
@@ -57,14 +60,16 @@ export function AppShell({
 
         <div className="flex items-center gap-2">
           {headerAction ?? (
-            <>
-              <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Icon name="notifications" />
-              </button>
-              <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
-                <Icon name="person" />
-              </button>
-            </>
+            hideHeaderActions ? null : (
+              <>
+                <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Icon name="notifications" />
+                </button>
+                <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
+                  <Icon name="person" />
+                </button>
+              </>
+            )
           )}
         </div>
       </header>

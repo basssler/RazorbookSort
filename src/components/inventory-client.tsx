@@ -158,7 +158,7 @@ function FilterPill({
       value={value === "All" ? "" : value}
       onChange={(e) => onChange(e.target.value)}
     >
-      <option value="">All {label}s</option>
+      <option value="">All {label === "Status" ? "Statuses" : `${label}s`}</option>
       {options.map((opt) => (
         <option key={opt} value={opt}>
           {opt}

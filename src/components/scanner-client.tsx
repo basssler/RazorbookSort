@@ -156,7 +156,7 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
   }
 
   return (
-    <div className="relative flex flex-1 flex-col bg-slate-800">
+    <div className="relative flex min-h-[calc(100dvh-57px)] flex-col bg-charcoal">
       {/* ── Full-screen camera area ── */}
       <div className="relative flex-1">
         {/* Camera viewfinder */}

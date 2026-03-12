@@ -15,6 +15,7 @@ export default async function ScanPage({
       currentPath="/scan"
       pageTitle="Scanner"
       showBack
+      hideNav
       headerAction={
         <button className="flex h-10 w-10 items-center justify-center rounded-full text-primary transition-colors hover:bg-primary/10">
           <Icon name="more_vert" />
