@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { Chip } from "@/components/ui/chip";
 import { Icon } from "@/components/ui/icon";
 import { Book } from "@/lib/app-types";
 
@@ -13,7 +12,7 @@ export function BookListItem({ book }: { book: Book }) {
       {/* Thumbnail */}
       {book.thumbnail_url ? (
         <div
-          className="size-16 shrink-0 rounded-lg border border-primary/10 bg-center bg-cover bg-no-repeat"
+          className="aspect-square size-16 shrink-0 rounded-lg border border-primary/10 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${book.thumbnail_url})` }}
         />
       ) : (
@@ -31,7 +30,9 @@ export function BookListItem({ book }: { book: Book }) {
           {book.authors || "Unknown author"}
         </p>
         <div className="mt-2 flex items-center gap-2">
-          <Chip>{book.quantity} {book.quantity === 1 ? "copy" : "copies"} scanned</Chip>
+          <span className="rounded-full bg-primary/10 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+            {book.quantity} {book.quantity === 1 ? "copy" : "copies"} scanned
+          </span>
         </div>
       </div>
 

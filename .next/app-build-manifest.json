@@ -25,6 +25,21 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/metadata/route.js"
+    ],
+    "/inventory/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/inventory/page.js"
+    ],
+    "/api/books/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/books/route.js"
+    ],
+    "/books/[id]/edit/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/books/[id]/edit/page.js"
     ]
   }
 }
