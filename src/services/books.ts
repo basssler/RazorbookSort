@@ -133,6 +133,14 @@ export async function incrementBookQuantityById(id: string) {
 }
 
 export async function createBookRecord(input: CreateBookInput) {
+  if (!input.isbn10 && !input.isbn13) {
+    throw new Error("ISBN is required.");
+  }
+
+  if (!input.binLabel.trim() || !input.intakeStatus.trim()) {
+    throw new Error("Bin label and intake status are required.");
+  }
+
   const supabase = createSupabaseServerClient();
   const { data, error } = await supabase
     .from("books")

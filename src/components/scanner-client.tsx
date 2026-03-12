@@ -45,12 +45,12 @@ function playSuccessBeep() {
   };
 }
 
-export function ScannerClient() {
+export function ScannerClient({ saved = false }: { saved?: boolean }) {
   const router = useRouter();
   const { activeBatch } = useActiveBatch();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(saved ? "Book saved. Ready for the next scan." : "");
   const [permissionState, setPermissionState] = useState<PermissionState>("loading");
   const [duplicateBook, setDuplicateBook] = useState<Book | null>(null);
   const lastHandledRef = useRef<string>("");
@@ -58,7 +58,10 @@ export function ScannerClient() {
   useEffect(() => {
     lastHandledRef.current = "";
     setDuplicateBook(null);
-  }, [activeBatch?.id]);
+    if (!saved) {
+      setMessage("");
+    }
+  }, [activeBatch?.id, saved]);
 
   async function submitIsbn(rawIsbn: string) {
     if (!activeBatch || busy || duplicateBook) {

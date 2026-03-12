@@ -1,0 +1,4 @@
+{
+  "/inventory/page": "app/inventory/page.js",
+  "/scan/page": "app/scan/page.js"
+}
