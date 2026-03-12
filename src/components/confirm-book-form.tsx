@@ -133,10 +133,12 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
 
   return (
     <form onSubmit={(event) => void handleSubmit(event)} className="flex flex-col gap-4">
-      <div className="rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">Scanned ISBN</p>
-        <p className="mt-2 text-lg font-semibold text-stone-900">{draft.isbn13 ?? draft.isbn10 ?? draft.normalizedIsbn}</p>
+      {/* ISBN display */}
+      <div className="rounded-lg border border-primary/10 bg-primary/5 p-4">
+        <p className="text-xs font-bold uppercase tracking-widest text-primary">Scanned ISBN</p>
+        <p className="mt-2 text-lg font-bold text-charcoal">{draft.isbn13 ?? draft.isbn10 ?? draft.normalizedIsbn}</p>
       </div>
+
       {metadataState === "loading" ? <StatusBanner tone="info">Looking up book details...</StatusBanner> : null}
       {metadataState === "empty" ? (
         <StatusBanner tone="warning">No metadata found. You can still save this book.</StatusBanner>
@@ -144,6 +146,7 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
       {metadataState === "error" ? (
         <StatusBanner tone="warning">Metadata lookup failed. You can still save this book.</StatusBanner>
       ) : null}
+
       <FieldShell label="Bin label">
         <SelectInput name="binLabel" value={binLabel} onChange={(event) => setBinLabel(event.target.value)} required>
           <option value="">Select bin label</option>
@@ -154,6 +157,7 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
           ))}
         </SelectInput>
       </FieldShell>
+
       <FieldShell label="Intake status">
         <SelectInput
           name="intakeStatus"
@@ -168,15 +172,19 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
           ))}
         </SelectInput>
       </FieldShell>
+
       <FieldShell label="Title">
         <TextInput name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
       </FieldShell>
+
       <FieldShell label="Authors">
         <TextInput name="authors" value={authors} onChange={(event) => setAuthors(event.target.value)} placeholder="Author or authors" />
       </FieldShell>
+
       <FieldShell label="Publisher">
         <TextInput name="publisher" value={publisher} onChange={(event) => setPublisher(event.target.value)} />
       </FieldShell>
+
       <FieldShell label="Published year">
         <TextInput
           name="publishedYear"
@@ -186,9 +194,11 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
           placeholder="2024"
         />
       </FieldShell>
+
       <FieldShell label="Thumbnail URL">
         <TextInput name="thumbnailUrl" value={thumbnailUrl} onChange={(event) => setThumbnailUrl(event.target.value)} />
       </FieldShell>
+
       <FieldShell label="Quantity">
         <TextInput
           name="quantity"
@@ -197,10 +207,13 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
           onChange={(event) => setQuantity(event.target.value)}
         />
       </FieldShell>
+
       <FieldShell label="Notes">
         <TextArea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Optional intake note" />
       </FieldShell>
+
       {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
+
       <Button disabled={saving} type="submit">
         {saving ? "Saving..." : "Save + Scan Next"}
       </Button>

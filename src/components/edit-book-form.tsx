@@ -5,6 +5,7 @@ import { FormEvent, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FieldShell, SelectInput, TextArea, TextInput } from "@/components/ui/field";
+import { StatusBanner } from "@/components/ui/status-banner";
 import { Book } from "@/lib/app-types";
 import { BIN_LABELS, INTAKE_STATUSES } from "@/types";
 
@@ -59,31 +60,32 @@ export function EditBookForm({ book }: { book: Book }) {
   }
 
   return (
-    <form onSubmit={(event) => void handleSubmit(event)} className="flex flex-col gap-4">
+    <form id="edit-book-form" onSubmit={(event) => void handleSubmit(event)} className="flex flex-col gap-4">
       <FieldShell label="Title">
         <TextInput name="title" value={title} onChange={(event) => setTitle(event.target.value)} />
       </FieldShell>
-      <FieldShell label="Authors">
+
+      <FieldShell label="Author">
         <TextInput name="authors" value={authors} onChange={(event) => setAuthors(event.target.value)} />
       </FieldShell>
+
+      <FieldShell label="ISBN">
+        <TextInput value={book.isbn_13 ?? book.isbn_10 ?? ""} readOnly />
+      </FieldShell>
+
       <FieldShell label="Publisher">
         <TextInput name="publisher" value={publisher} onChange={(event) => setPublisher(event.target.value)} />
       </FieldShell>
-      <FieldShell label="Published year">
-        <TextInput
-          name="publishedYear"
-          inputMode="numeric"
-          value={publishedYear}
-          onChange={(event) => setPublishedYear(event.target.value)}
-          placeholder="2024"
-        />
-      </FieldShell>
-      <FieldShell label="Thumbnail URL">
-        <TextInput name="thumbnailUrl" value={thumbnailUrl} onChange={(event) => setThumbnailUrl(event.target.value)} />
-      </FieldShell>
-      <div className="grid grid-cols-2 gap-3">
-        <FieldShell label="ISBN-13">
-          <TextInput value={book.isbn_13 ?? ""} readOnly />
+
+      <div className="grid grid-cols-2 gap-4">
+        <FieldShell label="Year">
+          <TextInput
+            name="publishedYear"
+            inputMode="numeric"
+            value={publishedYear}
+            onChange={(event) => setPublishedYear(event.target.value)}
+            placeholder="2024"
+          />
         </FieldShell>
         <FieldShell label="Quantity">
           <TextInput
@@ -94,10 +96,11 @@ export function EditBookForm({ book }: { book: Book }) {
           />
         </FieldShell>
       </div>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+
+      <div className="grid grid-cols-2 gap-4">
         <FieldShell label="Bin label">
           <SelectInput name="binLabel" value={binLabel} onChange={(event) => setBinLabel(event.target.value)}>
-            <option value="">Select bin label</option>
+            <option value="">Select bin</option>
             {BIN_LABELS.map((label) => (
               <option key={label} value={label}>
                 {label}
@@ -107,7 +110,7 @@ export function EditBookForm({ book }: { book: Book }) {
         </FieldShell>
         <FieldShell label="Intake status">
           <SelectInput name="intakeStatus" value={intakeStatus} onChange={(event) => setIntakeStatus(event.target.value)}>
-            <option value="">Select intake status</option>
+            <option value="">Select status</option>
             {INTAKE_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {status}
@@ -116,13 +119,31 @@ export function EditBookForm({ book }: { book: Book }) {
           </SelectInput>
         </FieldShell>
       </div>
-      <FieldShell label="Notes">
-        <TextArea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} />
+
+      <FieldShell label="Thumbnail URL">
+        <TextInput name="thumbnailUrl" value={thumbnailUrl} onChange={(event) => setThumbnailUrl(event.target.value)} />
       </FieldShell>
-      {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
-      <Button disabled={saving} type="submit">
-        {saving ? "Saving..." : "Save Changes"}
-      </Button>
+
+      <FieldShell label="Notes">
+        <TextArea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Optional notes" />
+      </FieldShell>
+
+      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
+
+      <div className="pt-4">
+        <Button disabled={saving} type="submit">
+          {saving ? "Saving..." : "Save Changes"}
+        </Button>
+      </div>
+
+      <div className="flex justify-center pt-2">
+        <button
+          type="button"
+          className="text-sm font-medium text-slate-400 transition-colors hover:text-primary"
+        >
+          Delete this book record
+        </button>
+      </div>
     </form>
   );
 }

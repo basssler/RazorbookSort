@@ -1,22 +1,44 @@
 import Link from "next/link";
 
+import { Chip } from "@/components/ui/chip";
+import { Icon } from "@/components/ui/icon";
 import { Book } from "@/lib/app-types";
-import { formatDate } from "@/lib/utils";
 
 export function BookListItem({ book }: { book: Book }) {
   return (
-    <Link href={`/books/${book.id}/edit`} className="block rounded-3xl border border-stone-200 bg-white p-4 shadow-sm">
-      <div className="flex items-start gap-3">
-        <div className="flex-1">
-          <p className="text-lg font-extrabold text-ink">{book.title || "Untitled book"}</p>
-          <p className="mt-1 text-sm text-muted">{book.authors || "Unknown author"}</p>
-          <p className="mt-2 text-sm text-muted">{book.isbn_13 || book.isbn_10 || "No ISBN saved"}</p>
+    <Link
+      href={`/books/${book.id}/edit`}
+      className="flex items-center gap-4 border-b border-primary/5 bg-white px-4 py-4 transition-colors hover:bg-primary/5 active:bg-primary/5"
+    >
+      {/* Thumbnail */}
+      {book.thumbnail_url ? (
+        <div
+          className="size-16 shrink-0 rounded-lg border border-primary/10 bg-center bg-cover bg-no-repeat"
+          style={{ backgroundImage: `url(${book.thumbnail_url})` }}
+        />
+      ) : (
+        <div className="flex size-16 shrink-0 items-center justify-center rounded-lg border border-primary/10 bg-primary/5 text-primary">
+          <Icon name="menu_book" size="text-2xl" />
         </div>
-        <div className="rounded-full bg-sand px-3 py-1 text-sm font-bold text-ink">Qty {book.quantity}</div>
+      )}
+
+      {/* Info */}
+      <div className="flex flex-1 flex-col justify-center">
+        <p className="text-base font-bold leading-tight text-charcoal">
+          {book.title || "Untitled book"}
+        </p>
+        <p className="mt-0.5 text-xs font-semibold uppercase tracking-wider text-primary">
+          {book.authors || "Unknown author"}
+        </p>
+        <div className="mt-2 flex items-center gap-2">
+          <Chip>{book.quantity} {book.quantity === 1 ? "copy" : "copies"} scanned</Chip>
+        </div>
       </div>
-      <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-accentDark">
-        {(book.intake_status ?? "No status")} | {book.bin_label ?? "No bin"} | {formatDate(book.updated_at)}
-      </p>
+
+      {/* Chevron */}
+      <div className="shrink-0">
+        <Icon name="chevron_right" className="text-slate-400" />
+      </div>
     </Link>
   );
 }

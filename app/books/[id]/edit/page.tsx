@@ -1,6 +1,6 @@
 import { AppShell } from "@/components/app-shell";
 import { EditBookForm } from "@/components/edit-book-form";
-import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { getBook } from "@/lib/db";
 
 export default async function EditBookPage({ params }: { params: Promise<{ id: string }> }) {
@@ -8,14 +8,24 @@ export default async function EditBookPage({ params }: { params: Promise<{ id: s
   const book = await getBook(id);
 
   return (
-    <AppShell currentPath="/inventory">
-      <Card className="flex flex-col gap-4 rounded-3xl border-stone-200 bg-white shadow-sm">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">Edit book</p>
-          <p className="mt-2 text-sm text-stone-600">Adjust the record details for this saved book.</p>
-        </div>
+    <AppShell
+      currentPath="/inventory"
+      pageTitle="Edit Book"
+      showBack
+      headerAction={
+        <button
+          form="edit-book-form"
+          type="submit"
+          className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-primary/90"
+        >
+          <Icon name="check" />
+        </button>
+      }
+    >
+      <main className="mx-auto max-w-2xl px-4 py-6 space-y-6">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Book Details</h3>
         <EditBookForm book={book} />
-      </Card>
+      </main>
     </AppShell>
   );
 }

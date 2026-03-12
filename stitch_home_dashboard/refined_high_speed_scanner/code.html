@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scanner (v1)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9b2234",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#201214",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }</script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-hidden">
+<!-- Live Camera View Simulation -->
+<div class="absolute inset-0 z-0 bg-slate-800">
+<div class="h-full w-full bg-gradient-to-b from-black/60 via-transparent to-black/60" data-alt="Live camera view of a bookshelf with books"></div>
+<!-- Scanning Frame Overlay -->
+<div class="absolute inset-0 flex items-center justify-center p-8">
+<div class="relative h-64 w-full max-w-md border-2 border-primary/50 rounded-xl overflow-hidden">
+<div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary"></div>
+<!-- Scanning Line -->
+<div class="absolute left-0 right-0 top-1/2 h-0.5 bg-primary shadow-[0_0_15px_#9b2234]"></div>
+</div>
+</div>
+</div>
+<!-- Top AppBar -->
+<header class="relative z-10 flex items-center justify-between p-4 bg-white dark:bg-background-dark border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3">
+<button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-primary/10 text-primary transition-colors">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-lg font-bold tracking-tight text-slate-900 dark:text-white">Batch ID: #88291</h2>
+</div>
+<button class="flex h-10 w-10 items-center justify-center rounded-full hover:bg-primary/10 text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</header>
+<!-- Main Content Area (Spacer for camera) -->
+<main class="relative z-10 flex-1 flex flex-col justify-end"><!-- Duplicate Handling Notification -->
+<div class="p-4 @container">
+<div class="flex flex-col gap-3 rounded-xl border border-primary/20 bg-white/90 dark:bg-background-dark/95 p-4 shadow-xl backdrop-blur-md">
+<p class="text-slate-800 dark:text-slate-200 text-sm font-semibold leading-tight">
+            Duplicate ISBN detected in this batch.
+        </p>
+<div class="flex gap-2">
+<button class="flex-1 h-9 px-2 items-center justify-center rounded-lg bg-primary text-white text-[11px] font-bold shadow-sm hover:opacity-90 transition-opacity uppercase tracking-wider">Add Another</button>
+<button class="flex-1 h-9 px-2 items-center justify-center rounded-lg bg-primary/10 text-primary text-[11px] font-bold hover:bg-primary/20 transition-colors uppercase tracking-wider">Open Record</button>
+<button class="h-9 px-3 items-center justify-center rounded-lg border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400 text-[11px] font-bold hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors uppercase">Cancel</button>
+</div>
+</div>
+</div>
+<!-- Quick Actions Section -->
+<div class="px-4 pb-2 flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<button class="flex items-center gap-2 px-4 py-2 rounded-full border border-primary/40 text-primary text-xs font-bold hover:bg-primary/5 transition-colors">
+<span class="material-symbols-outlined text-lg">keyboard</span>
+            Manual ISBN Entry
+        </button>
+<button class="text-slate-500 dark:text-slate-400 text-xs font-semibold hover:text-primary transition-colors flex items-center gap-1">
+            Review &amp; Finish
+            <span class="material-symbols-outlined text-sm">chevron_right</span>
+</button>
+</div>
+<div class="flex justify-center">
+<p class="text-[10px] text-slate-400 dark:text-slate-500 font-medium uppercase tracking-widest">Batch Progress: 12 books scanned</p>
+</div>
+</div>
+<!-- Bottom Action Area -->
+<nav class="bg-white/95 dark:bg-background-dark/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-md px-2 pb-6 pt-2">
+<div class="flex justify-between items-center max-w-lg mx-auto">
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined !text-2xl">home</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined !text-2xl">inventory_2</span>
+<span class="text-[10px] font-medium">Inventory</span>
+</a>
+<div class="relative -mt-8 flex-1 flex flex-col items-center">
+<div class="absolute -top-1 w-14 h-14 bg-white dark:bg-background-dark rounded-full shadow-inner"></div>
+<button class="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg active:scale-95 transition-transform">
+<span class="material-symbols-outlined !text-3xl">barcode_scanner</span>
+</button>
+<span class="mt-1 text-[10px] font-bold text-primary uppercase tracking-tighter">Scanner</span>
+</div>
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined !text-2xl">view_list</span>
+<span class="text-[10px] font-medium">Batches</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 py-1 text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined !text-2xl">settings</span>
+<span class="text-[10px] font-medium">Settings</span>
+</a>
+</div>
+<div class="mt-4 flex justify-center">
+<div class="w-32 h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full"></div>
+</div>
+</nav></main>
+</div>
+</body></html>

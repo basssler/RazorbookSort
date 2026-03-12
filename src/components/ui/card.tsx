@@ -9,6 +9,14 @@ export function Card({
   className?: string;
   children: ReactNode;
 }) {
-  return <div className={cn("rounded-panel border border-line bg-card p-5 shadow-card", className)}>{children}</div>;
+  return (
+    <div
+      className={cn(
+        "rounded-xl border border-primary/5 bg-white p-5 shadow-card",
+        className,
+      )}
+    >
+      {children}
+    </div>
+  );
 }
-

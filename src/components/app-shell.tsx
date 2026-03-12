@@ -1,32 +1,81 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 
 import { BottomNav } from "@/components/bottom-nav";
+import { Icon } from "@/components/ui/icon";
 import { useActiveBatch } from "@/hooks/use-active-batch";
+
+type AppShellProps = {
+  children: ReactNode;
+  currentPath: string;
+  /** Page title shown in center of header. */
+  pageTitle?: string;
+  /** Whether to show a back arrow in the header. */
+  showBack?: boolean;
+  /** Optional trailing element rendered in the header's right slot. */
+  headerAction?: ReactNode;
+  /** If true, the bottom nav is hidden (e.g. scanner full-screen mode). */
+  hideNav?: boolean;
+};
 
 export function AppShell({
   children,
   currentPath,
-}: {
-  children: ReactNode;
-  currentPath: string;
-}) {
+  pageTitle,
+  showBack = false,
+  headerAction,
+  hideNav = false,
+}: AppShellProps) {
+  const router = useRouter();
   const { activeBatch, hasHydrated } = useActiveBatch();
 
+  const title = pageTitle ?? (hasHydrated && activeBatch ? activeBatch.name : "Razorbook Reach");
+
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.14),transparent_28rem),linear-gradient(180deg,#f7f7f5_0%,#f0eee8_100%)]">
-      <div className="mx-auto flex min-h-screen w-full max-w-md flex-col px-4 pb-28 pt-4">
-        <header className="mb-4 rounded-3xl border border-stone-200 bg-white px-5 py-4 shadow-sm">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">Razorbook Reach Intake</p>
-          <h1 className="mt-2 text-xl font-semibold text-stone-900">Mobile intake shell</h1>
-          <p className="mt-3 text-sm text-stone-600">
-            Active batch: {hasHydrated ? activeBatch?.name ?? "none selected" : "loading..."}
-          </p>
-        </header>
-        <main className="flex-1">{children}</main>
-      </div>
-      <BottomNav currentPath={currentPath} />
+    <div className="relative flex min-h-screen flex-col overflow-x-hidden">
+      {/* ---- Sticky header ---- */}
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-primary/10 bg-white px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-3">
+          {showBack ? (
+            <button
+              onClick={() => router.back()}
+              className="flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-colors hover:bg-primary/10"
+            >
+              <Icon name="arrow_back" />
+            </button>
+          ) : (
+            <button className="flex h-10 w-10 items-center justify-center rounded-full text-charcoal">
+              <Icon name="menu" />
+            </button>
+          )}
+          <h1 className="text-lg font-bold leading-tight tracking-tight text-charcoal">
+            {title}
+          </h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {headerAction ?? (
+            <>
+              <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Icon name="notifications" />
+              </button>
+              <button className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white">
+                <Icon name="person" />
+              </button>
+            </>
+          )}
+        </div>
+      </header>
+
+      {/* ---- Main content ---- */}
+      <main className={hideNav ? "flex-1" : "flex-1 pb-24"}>
+        {children}
+      </main>
+
+      {/* ---- Bottom navigation ---- */}
+      {!hideNav && <BottomNav currentPath={currentPath} />}
     </div>
   );
 }

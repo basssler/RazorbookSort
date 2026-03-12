@@ -6,7 +6,7 @@ export default async function HomePage() {
   const batches = await listBatches();
 
   return (
-    <AppShell currentPath="/">
+    <AppShell currentPath="/" pageTitle="Home Dashboard">
       <HomePageClient batches={batches} />
     </AppShell>
   );

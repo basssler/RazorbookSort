@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inventory Management - Razorback Red</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script content='        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9b2234",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#201214",
+                        "charcoal": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }' id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9b2234",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#201214",
+                        "charcoal": "#121212",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-charcoal dark:text-slate-100 min-h-screen">
+<div class="relative flex h-auto min-h-screen w-full flex-col max-w-md mx-auto shadow-2xl bg-background-light dark:bg-background-dark overflow-x-hidden">
+<!-- Header -->
+<div class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between border-b border-primary/10">
+<div class="text-charcoal dark:text-slate-100 flex size-12 shrink-0 items-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-charcoal dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1">Inventory List</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary text-white hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<!-- Search Bar -->
+<div class="px-4 py-3">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-primary/20 shadow-sm overflow-hidden">
+<div class="text-primary flex bg-white dark:bg-slate-800 items-center justify-center pl-4">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-charcoal dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-white dark:bg-slate-800 h-full placeholder:text-slate-400 px-4 pl-2 text-base font-normal leading-normal" placeholder="Search books or authors" value=""/>
+</div>
+</label>
+</div>
+<!-- Filters -->
+<div class="flex gap-3 px-4 py-2 overflow-x-auto no-scrollbar"><button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg border border-primary/20 bg-white dark:bg-slate-800 px-4 transition-all hover:bg-primary/5">
+<p class="text-charcoal dark:text-slate-100 text-sm font-semibold">Batch</p>
+<span class="material-symbols-outlined text-primary text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg border border-primary/20 bg-white dark:bg-slate-800 px-4 transition-all hover:bg-primary/5">
+<p class="text-charcoal dark:text-slate-100 text-sm font-semibold">Status</p>
+<span class="material-symbols-outlined text-primary text-sm">keyboard_arrow_down</span>
+</button>
+<button class="flex h-9 shrink-0 items-center justify-center gap-x-2 rounded-lg border border-primary/20 bg-white dark:bg-slate-800 px-4 transition-all hover:bg-primary/5">
+<p class="text-charcoal dark:text-slate-100 text-sm font-semibold">Bin</p>
+<span class="material-symbols-outlined text-primary text-sm">keyboard_arrow_down</span>
+</button></div>
+<!-- Inventory Items -->
+<div class="flex flex-col flex-1 mt-4">
+<!-- Row 1 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 px-4 py-4 border-b border-primary/5 hover:bg-primary/5 cursor-pointer">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-primary/10" data-alt="Classic book cover design blue and gold" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC4j5lRLBF2jMh1w40uO3sX0EiDUi6sgzf7wUqjqpXeF_0mYc7ieMUNXdnxz1UN4CKXmcYWfrogHPlqKW5T_CrtlYDc16GIoOpMyEnNtrQzq2LMgps7pCMs_3DZuLg-ZXw52vo8qGz7U9hTvvklc2NqsQCQ04cqMdaLP0d4qrIgUhf7yOyeAXZ2Yc85sJCo8UgiVeYUzwGgO5UczB-0trosv7ly-QWVBuMwgnwc7lmj3eWfj52J8Jcxz6fq-6aDbdMrjr7ammHuTzk");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-charcoal dark:text-slate-100 text-base font-bold leading-tight">The Great Gatsby</p>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider mt-0.5">F. Scott Fitzgerald</p>
+<div class="flex items-center gap-2 mt-2"><span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">42 COPIES SCANNED</span></div>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 px-4 py-4 border-b border-primary/5 hover:bg-primary/5 cursor-pointer">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-primary/10" data-alt="Old library book spine detail texture" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDEVeQiFgHh4luq63txeHSgIJufAJDEyrsx9rRaVFznucaky_Dpay5FzE-Ty8_rmGDjh4aevplvieFRH_f_Hst6V3c2Kvhn6E71QzuD5Oo0tKJDe39q9qcSOhAcHFiw0eYVGUC7dCtXfMSX9cpaxBLUyjdga5ac6irhDmMCvefkeNXv71E668W0NnedUwrz3vGVH0ITmiqM0OnBBGZjVAdu95SQnAnhxTeizeVBPlfx0I1P_k06fAKht0WS5YjUunVjtV40ETsBgeY");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-charcoal dark:text-slate-100 text-base font-bold leading-tight">1984</p>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider mt-0.5">George Orwell</p>
+<div class="flex items-center gap-2 mt-2"><span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">128 COPIES SCANNED</span></div>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 px-4 py-4 border-b border-primary/5 hover:bg-primary/5 cursor-pointer">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-primary/10" data-alt="Stack of colorful hardback books minimalist" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDg_VDa3_lqXyyXJoXfNGkFtUfR3xVUSGnmitYdNhhBQ2JsRXWR-Zm7aqIF7ZUF_12JmhCSggR2-okmWhWls7MwzaD5iLCJMso3OSZ3YUeYTccVvXy5EhJrSPLXe5tmX3baEIbIaHvHL4xl0TUnB0QXXQCNs-LaHF8Wz9Q6-LPbWI2ICwlaqkDiZQZJPkTf9So8K7-_J_mK6UEyiw5-IOOxwZa3NMFb-tTNG3WzGRJq8V-xUROYi9gwDcr9LDLcMgol0zUVD7YMiqI");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-charcoal dark:text-slate-100 text-base font-bold leading-tight">The Catcher in the Rye</p>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider mt-0.5">J.D. Salinger</p>
+<div class="flex items-center gap-2 mt-2"><span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">15 COPIES SCANNED</span></div>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="flex items-center gap-4 bg-white dark:bg-slate-800/50 px-4 py-4 border-b border-primary/5 hover:bg-primary/5 cursor-pointer">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-16 border border-primary/10" data-alt="Opened novel pages with warm lighting" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAqA1kAWd4oybg7EmQ7XQJwzSouZy9b9lI4GHggN_pce1Lq23vC79Y3b6CegoOCMH7pu3sZbYeIqbgJhNykwERrx_2ksV9ks2benui6FijFMLtUTVGkCKRH6x8A-jq07mCUvYOOhckApyy7QXojXioM2nyUnFOc4l3cS-MdeJdLlkZSab-pdMMXcPrvIkkyiW0DolnJVf__-nDyLVW6yukRL7PlgVGWe3WS-cwQY_7v67EDPW1R7H_wWJ2cKhWTju1T9tBWd2c3GqQ");'></div>
+<div class="flex flex-1 flex-col justify-center">
+<p class="text-charcoal dark:text-slate-100 text-base font-bold leading-tight">Brave New World</p>
+<p class="text-primary text-xs font-semibold uppercase tracking-wider mt-0.5">Aldous Huxley</p>
+<div class="flex items-center gap-2 mt-2"><span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">89 COPIES SCANNED</span></div>
+</div>
+<div class="shrink-0">
+<span class="material-symbols-outlined text-slate-400">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Export Action Button -->
+<div class="px-4 py-6">
+<button class="w-full flex items-center justify-center gap-2 h-12 bg-primary text-white rounded-lg font-bold text-base shadow-lg shadow-primary/20 hover:brightness-110 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-xl">file_export</span>
+    Export CSV
+</button>
+</div>
+<!-- Bottom Navigation -->
+<div class="flex gap-2 border-t border-primary/10 bg-white dark:bg-background-dark px-4 pb-6 pt-2 sticky bottom-0 w-full"><!-- Home -->
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">home</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Home</p>
+</a>
+<!-- Inventory (Active) -->
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">inventory_2</span>
+</div>
+<p class="text-[10px] font-bold leading-normal tracking-wide">Inventory</p>
+</a>
+<!-- Scanner (Central) -->
+<a class="flex flex-1 flex-col items-center justify-center gap-1" href="#">
+<div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-lg -mt-4">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide text-primary">Scanner</p>
+</a>
+<!-- Batches -->
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Batches</p>
+</a>
+<!-- Settings -->
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-slate-400 dark:text-slate-500 hover:text-primary transition-colors" href="#">
+<div class="flex h-8 items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<p class="text-[10px] font-medium leading-normal tracking-wide">Settings</p>
+</a></div>
+</div>
+</body></html>

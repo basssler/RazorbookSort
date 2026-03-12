@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { BarcodeScanner } from "@/components/scanner/barcode-scanner";
 import { DuplicateModal } from "@/components/scanner/duplicate-modal";
 import { ManualEntry } from "@/components/scanner/manual-entry";
-import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { StatusBanner } from "@/components/ui/status-banner";
 import { useActiveBatch } from "@/hooks/use-active-batch";
 import { Book } from "@/types";
@@ -154,16 +154,19 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card className="flex flex-col gap-3 rounded-3xl border-stone-200 bg-white shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">Scanner</p>
-        <p className="text-xl font-black text-ink">{activeBatch?.name ?? "No active batch selected"}</p>
-        <p className="text-sm text-muted">
+    <div className="flex flex-col gap-4 p-4">
+      {/* Scanner heading card */}
+      <div className="rounded-xl border border-primary/5 bg-white p-4 shadow-card">
+        <p className="text-xs font-bold uppercase tracking-widest text-primary">Scanner</p>
+        <p className="mt-1 text-lg font-bold text-charcoal">
+          {activeBatch?.name ?? "No active batch selected"}
+        </p>
+        <p className="mt-1 text-sm text-slate-500">
           {permissionState === "ready"
             ? "Camera scan is live. Try the barcode on the back cover first, then fall back to manual entry if the cover is glossy or damaged."
             : "If camera access fails, volunteers can keep moving with manual ISBN entry."}
         </p>
-      </Card>
+      </div>
 
       <BarcodeScanner paused={busy || Boolean(duplicateBook)} onDetected={submitIsbn} onPermissionState={setPermissionState} />
 
@@ -177,10 +180,11 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
         />
       ) : null}
 
-      <Card className="flex flex-col gap-4 rounded-3xl border-stone-200 bg-white shadow-sm">
-        <p className="text-sm font-semibold text-ink">Manual fallback</p>
+      {/* Manual entry */}
+      <div className="rounded-xl border border-primary/5 bg-white p-4 shadow-card">
+        <p className="mb-2 text-sm font-semibold text-charcoal">Manual fallback</p>
         <ManualEntry disabled={busy || Boolean(duplicateBook)} onSubmitIsbn={submitIsbn} />
-      </Card>
+      </div>
 
       {busy ? <StatusBanner tone="info">Processing scan...</StatusBanner> : null}
       {message ? <StatusBanner tone="success">{message}</StatusBanner> : null}

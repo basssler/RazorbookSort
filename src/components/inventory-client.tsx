@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 
 import { BookListItem } from "@/components/book-list-item";
-import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { StatusBanner } from "@/components/ui/status-banner";
-import { FieldShell, SelectInput, TextInput } from "@/components/ui/field";
+import { TextInput } from "@/components/ui/field";
 import { useActiveBatch } from "@/hooks/use-active-batch";
 import { BIN_LABELS, Book, INTAKE_STATUSES } from "@/types";
 
@@ -56,63 +56,114 @@ export function InventoryClient() {
   }, [activeBatch, binLabel, intakeStatus, search]);
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card className="flex flex-col gap-4 rounded-3xl border-stone-200 bg-white shadow-sm">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">Inventory</p>
-          <p className="mt-2 text-sm text-stone-600">
-            {activeBatch ? `Browsing books in ${activeBatch.name}.` : "Select an active batch first."}
-          </p>
+    <div className="flex flex-col">
+      {/* Search bar */}
+      <div className="px-4 py-3">
+        <div className="flex w-full items-stretch overflow-hidden rounded-lg border border-primary/20 shadow-sm">
+          <div className="flex items-center justify-center bg-white pl-4 text-primary">
+            <Icon name="search" />
+          </div>
+          <input
+            className="flex w-full min-w-0 flex-1 border-none bg-white px-4 py-3 text-base text-charcoal placeholder:text-slate-400 focus:outline-none focus:ring-0"
+            placeholder="Search books or authors"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
         </div>
-        <FieldShell label="Search by title, author, or ISBN">
-          <TextInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Magic Tree House or 978..." />
-        </FieldShell>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <FieldShell label="Bin label">
-            <SelectInput value={binLabel} onChange={(event) => setBinLabel(event.target.value)}>
-              <option value="">All bin labels</option>
-              {BIN_LABELS.map((label) => (
-                <option key={label} value={label}>
-                  {label}
-                </option>
-              ))}
-            </SelectInput>
-          </FieldShell>
-          <FieldShell label="Intake status">
-            <SelectInput value={intakeStatus} onChange={(event) => setIntakeStatus(event.target.value)}>
-              <option value="">All statuses</option>
-              {INTAKE_STATUSES.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </SelectInput>
-          </FieldShell>
+      </div>
+
+      {/* Filter pills */}
+      <div className="flex gap-3 overflow-x-auto px-4 py-2">
+        <FilterPill
+          label="Batch"
+          value={activeBatch?.name ?? "All"}
+        />
+        <FilterPill
+          label="Status"
+          value={intakeStatus || "All"}
+          options={INTAKE_STATUSES}
+          onChange={setIntakeStatus}
+        />
+        <FilterPill
+          label="Bin"
+          value={binLabel || "All"}
+          options={BIN_LABELS}
+          onChange={setBinLabel}
+        />
+      </div>
+
+      {/* Book list */}
+      {loading ? (
+        <div className="px-4 py-4">
+          <StatusBanner tone="info">Loading inventory...</StatusBanner>
         </div>
-        {activeBatch ? (
-          <a
-            href={`/api/batches/${activeBatch.id}/export`}
-            className="flex min-h-12 items-center justify-center rounded-2xl bg-emerald-600 px-4 text-sm font-semibold text-white"
-          >
-            Export CSV
-          </a>
-        ) : null}
-      </Card>
-
-      {loading ? <StatusBanner tone="info">Loading inventory...</StatusBanner> : null}
-      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
-
-      {!loading && !error ? (
-        <div className="flex flex-col gap-3">
+      ) : error ? (
+        <div className="px-4 py-4">
+          <StatusBanner tone="error">{error}</StatusBanner>
+        </div>
+      ) : (
+        <div className="mt-2 flex flex-col">
           {books.length > 0 ? (
             books.map((book) => <BookListItem key={book.id} book={book} />)
           ) : (
-            <Card className="rounded-3xl border-stone-200 bg-white text-stone-600 shadow-sm">
+            <div className="px-4 py-8 text-center text-sm text-slate-400">
               No books found for this batch and filter combination.
-            </Card>
+            </div>
           )}
         </div>
-      ) : null}
+      )}
+
+      {/* Export CSV */}
+      {activeBatch && (
+        <div className="px-4 py-6">
+          <a
+            href={`/api/batches/${activeBatch.id}/export`}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-primary font-bold text-white shadow-lg shadow-primary/20 transition-all hover:brightness-110 active:scale-[0.98]"
+          >
+            <Icon name="file_export" size="text-xl" />
+            Export CSV
+          </a>
+        </div>
+      )}
     </div>
+  );
+}
+
+/* ——— Filter pill sub-component ——— */
+
+function FilterPill({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options?: readonly string[];
+  onChange?: (value: string) => void;
+}) {
+  if (!options || !onChange) {
+    // Display-only pill
+    return (
+      <div className="flex h-9 shrink-0 items-center gap-2 rounded-lg border border-primary/20 bg-white px-4">
+        <span className="text-sm font-semibold text-charcoal">{label}</span>
+        <Icon name="keyboard_arrow_down" className="text-sm text-primary" />
+      </div>
+    );
+  }
+
+  return (
+    <select
+      className="flex h-9 shrink-0 appearance-none items-center gap-2 rounded-lg border border-primary/20 bg-white px-4 text-sm font-semibold text-charcoal outline-none focus:border-primary focus:ring-1 focus:ring-primary/30"
+      value={value === "All" ? "" : value}
+      onChange={(e) => onChange(e.target.value)}
+    >
+      <option value="">All {label}s</option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
   );
 }

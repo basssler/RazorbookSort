@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { AppShell } from "@/components/app-shell";
 import { EditBookForm } from "@/components/edit-book-form";
-import { Card } from "@/components/ui/card";
+import { Icon } from "@/components/ui/icon";
 import { getBook } from "@/lib/db";
 
 export default async function EditBookPage({ params }: { params: Promise<{ id: string }> }) {
@@ -10,20 +10,32 @@ export default async function EditBookPage({ params }: { params: Promise<{ id: s
   const book = await getBook(id);
 
   return (
-    <AppShell currentPath="/inventory">
-      <Card className="flex flex-col gap-4">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-accentDark">Edit book</p>
-          <p className="mt-2 text-sm text-muted">Adjust the saved details, then return to the batch inventory.</p>
-        </div>
-        <EditBookForm book={book} />
-        <Link
-          href={`/inventory?batchId=${book.batch_id}`}
-          className="rounded-3xl border border-line bg-sand px-5 py-4 text-center font-semibold text-ink"
+    <AppShell
+      currentPath="/inventory"
+      pageTitle="Edit Book"
+      showBack
+      headerAction={
+        <button
+          form="edit-book-form"
+          type="submit"
+          className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-primary/90"
         >
-          Back To Inventory
-        </Link>
-      </Card>
+          <Icon name="check" />
+        </button>
+      }
+    >
+      <main className="mx-auto max-w-2xl px-4 py-6 space-y-6">
+        <h3 className="text-sm font-bold uppercase tracking-wider text-primary">Book Details</h3>
+        <EditBookForm book={book} />
+        <div className="flex justify-center pt-4">
+          <Link
+            href="/inventory"
+            className="text-sm font-medium text-slate-400 transition-colors hover:text-primary"
+          >
+            Back To Inventory
+          </Link>
+        </div>
+      </main>
     </AppShell>
   );
 }

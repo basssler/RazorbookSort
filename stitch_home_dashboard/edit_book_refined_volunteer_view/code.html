@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9b2234",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#201214",
+                        "charcoal": "#1a1a1a"
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "8px",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<title>Edit Book (v1) - Razorback Library</title>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-charcoal dark:text-slate-100 min-h-screen flex flex-col">
+<header class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark border-b border-primary/10 p-4 justify-between">
+<div class="text-charcoal dark:text-slate-100 flex size-10 shrink-0 items-center justify-center cursor-pointer">
+<span class="material-symbols-outlined">arrow_back</span>
+</div>
+<h2 class="text-charcoal dark:text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 text-center">Edit Book (v1)</h2>
+<div class="flex w-10 items-center justify-end">
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-primary text-white transition-colors hover:bg-primary/90">
+<span class="material-symbols-outlined">check</span>
+</button>
+</div>
+</header>
+<main class="flex-1 overflow-y-auto pb-24">
+<div class="max-w-2xl mx-auto px-4 py-6 space-y-6">
+<section>
+<h3 class="text-primary text-sm font-bold uppercase tracking-wider mb-4">Book Details</h3>
+<div class="grid grid-cols-1 gap-4">
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Title</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="The Great Gatsby"/>
+</label>
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Author</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="F. Scott Fitzgerald"/>
+</label>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">ISBN</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="978-0743273565"/>
+</label>
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Publisher</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="Scribner"/>
+</label>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Year</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="number" value="1925"/>
+</label>
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Batch</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="B-2023-04"/>
+</label>
+<label class="flex flex-col gap-1 col-span-2 md:col-span-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Location</span>
+<input class="form-input block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary h-12 px-4 border-slate-200" type="text" value="Shelf A-12"/>
+</label>
+</div>
+<label class="flex flex-col gap-1">
+<span class="text-charcoal dark:text-slate-200 text-sm font-semibold">Notes</span>
+<textarea class="form-textarea block w-full rounded-lg bg-white dark:bg-background-dark/50 text-charcoal dark:text-slate-100 focus:border-primary focus:ring-primary px-4 py-2 border-slate-200" rows="3">First edition reprint, minor wear on spine.</textarea>
+</label>
+</div>
+</section>
+<div class="pt-8">
+<button class="w-full flex items-center justify-center gap-2 rounded-lg h-14 bg-primary text-white font-bold text-lg shadow-md hover:shadow-lg active:scale-[0.98] transition-all">
+                    Save Changes
+                </button>
+</div><div class="mt-8 flex justify-center">
+<button class="text-slate-400 dark:text-slate-500 text-sm font-medium hover:text-primary transition-colors">
+        Delete this book record
+    </button>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 right-0 flex gap-2 border-t border-primary/10 bg-background-light dark:bg-background-dark px-4 pb-3 pt-2 safe-area-inset-bottom">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">home</span>
+<p class="text-[10px] font-medium leading-none">Home</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">inventory_2</span>
+<p class="text-[10px] font-medium leading-none">Inventory</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">qr_code_scanner</span>
+<p class="text-[10px] font-medium leading-none">Scanner</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary/60 dark:text-slate-400" href="#">
+<span class="material-symbols-outlined">layers</span>
+<p class="text-[10px] font-medium machine-none">Batches</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">settings</span>
+<p class="text-[10px] font-medium leading-none">Settings</p>
+</a>
+</nav>
+</body></html>

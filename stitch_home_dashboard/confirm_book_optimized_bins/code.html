@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#9b2234",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#201214",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100">
+<div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Top Navigation -->
+<div class="flex items-center p-4 pb-2 justify-between">
+<button class="text-slate-900 dark:text-slate-100 flex size-12 shrink-0 items-center justify-start">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h2 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center pr-12">Confirm Book</h2>
+</div>
+<!-- Book Main Details -->
+<div class="p-4">
+<div class="flex items-stretch justify-between gap-4 bg-white dark:bg-slate-800/50 p-4 rounded-xl shadow-sm border border-primary/10">
+<div class="flex flex-[2_2_0px] flex-col gap-3">
+<div class="flex flex-col gap-1"><p class="text-primary text-xs font-bold uppercase tracking-widest mb-0.5">ISBN: 9780743273565</p>
+<h1 class="text-slate-900 dark:text-slate-100 text-2xl font-extrabold leading-tight tracking-tight">The Great Gatsby</h1>
+<p class="text-slate-500 dark:text-slate-400 text-base font-semibold">F. Scott Fitzgerald</p></div>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary/10 text-primary hover:bg-primary/20 transition-colors gap-2 text-sm font-semibold w-fit">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+<span>Edit Details</span>
+</button>
+</div>
+<div class="w-24 h-36 bg-center bg-no-repeat bg-cover rounded-lg shadow-md shrink-0 border border-slate-200 dark:border-slate-700" data-alt="The front cover of a classic novel" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCKBkP9rXNoBiRIbY5OV-wgRgPxC-bVv66nkBQReXvMR7pTSrs7diruIfl-hQkvDTDiXz9FG__dEmtd3Ex1JXNc5vrRl0dUVZVXyHgJXlhK7mlDQCNvyPvIolfU4LXpTvLN4XiyWmy6k1A_4399Bm0CjEed-YMwXSyqTtQNseJuWziLtRPfFUVjQXjTDA95fTfopwa-7Gcn5MNGvMB7N2f_iTRxx2POepgRoSUSnQJ0-jBe5hlZ2P7HbBG1yOehKXUTAbDP_g5HEvM");'>
+</div>
+</div>
+</div>
+<!-- Bin Selection -->
+<div class="px-4 py-2">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">inventory_2</span>
+                Select Bin
+            </h3>
+<div class="grid grid-cols-2 gap-3"><button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">Board Book</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">Pre-K</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">K-2</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">3-5</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">Middle School</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">YA</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-primary/50 text-slate-700 dark:text-slate-300 transition-all active:scale-95 shadow-sm">
+<span class="text-sm font-bold">Adult / Other</span>
+</button>
+<button class="flex h-12 items-center justify-center rounded-lg bg-slate-50/50 dark:bg-slate-900/20 border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 transition-all active:scale-95">
+<span class="text-sm font-semibold italic">Unknown</span>
+</button></div>
+</div>
+<!-- Status Selection -->
+<div class="px-4 py-4">
+<h3 class="text-slate-900 dark:text-slate-100 text-lg font-bold leading-tight tracking-[-0.015em] mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">assignment_turned_in</span>
+Status
+</h3>
+<div class="flex gap-3">
+<button class="flex-1 flex flex-col items-center justify-center py-4 rounded-xl border-2 border-emerald-500/20 bg-emerald-50/50 dark:bg-emerald-950/10 text-emerald-600 dark:text-emerald-400 transition-all">
+<span class="material-symbols-outlined text-[28px] mb-1">check_circle</span>
+<span class="text-[11px] font-black uppercase tracking-tighter">Keep</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center py-4 rounded-xl border-2 border-amber-500 bg-amber-500 text-white shadow-lg shadow-amber-500/30 transition-all">
+<span class="material-symbols-outlined text-[28px] mb-1" style="font-variation-settings: 'FILL' 1">rate_review</span>
+<span class="text-[11px] font-black uppercase tracking-tighter">Review</span>
+</button>
+<button class="flex-1 flex flex-col items-center justify-center py-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-400 transition-all">
+<span class="material-symbols-outlined text-[28px] mb-1">cancel</span>
+<span class="text-[11px] font-black uppercase tracking-tighter">Reject</span>
+</button>
+</div>
+</div>
+<!-- Spacer -->
+<div class="flex-grow"></div>
+<!-- Bottom CTA -->
+<div class="p-4">
+<button class="w-full flex h-14 items-center justify-center gap-3 rounded-xl bg-primary text-white text-lg font-black uppercase tracking-tight shadow-lg shadow-primary/20 active:scale-[0.98] transition-all hover:brightness-110">
+<span>Save + Scan Next</span>
+<span class="material-symbols-outlined">barcode_scanner</span>
+</button>
+</div><nav class="sticky bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 pb-safe-area">
+<div class="flex items-center justify-around h-16">
+<a class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">home</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Inventory</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 h-full text-primary gap-1 relative" href="#">
+<div class="absolute -top-6 bg-primary text-white p-3 rounded-full shadow-lg border-4 border-background-light dark:border-background-dark active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[28px] block">barcode_scanner</span>
+</div>
+<span class="text-[10px] font-black uppercase tracking-tighter mt-8">Scanner</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">folder_copy</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Batches</span>
+</a>
+<a class="flex flex-col items-center justify-center flex-1 h-full text-slate-500 dark:text-slate-400 gap-1" href="#">
+<span class="material-symbols-outlined text-[24px]">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

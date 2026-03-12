@@ -5,21 +5,27 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: "#f7f2e7",
-        card: "#fffaf1",
-        sand: "#ede2c7",
-        ink: "#1f2a1f",
-        muted: "#5d655b",
-        accent: "#c35f24",
-        accentDark: "#8f3d16",
-        line: "#d3c3a3",
-        moss: "#2d6a4f",
+        primary: "#9b2234",
+        "bg-light": "#f8f6f6",
+        "bg-dark": "#201214",
+        charcoal: "#1a0f11",
+        // Semantic aliases used across components
+        ink: "#1a0f11",
+        muted: "#64748b", // slate-500 equivalent
       },
-      boxShadow: {
-        card: "0 12px 30px rgba(143, 61, 22, 0.08)",
+      fontFamily: {
+        display: ["Inter", "sans-serif"],
       },
       borderRadius: {
-        panel: "1.5rem",
+        DEFAULT: "0.5rem",
+        lg: "0.75rem",
+        xl: "1rem",
+        "2xl": "1rem",
+        "3xl": "1rem",
+        full: "9999px",
+      },
+      boxShadow: {
+        card: "0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04)",
       },
     },
   },
@@ -27,4 +33,3 @@ const config: Config = {
 };
 
 export default config;
-
