@@ -2,8 +2,6 @@
 
 import { Book } from "@/types";
 
-import { Button } from "@/components/ui/button";
-
 export function DuplicateModal({
   book,
   busy,
@@ -18,21 +16,40 @@ export function DuplicateModal({
   onCancel: () => void;
 }) {
   return (
-    <div className="rounded-3xl border border-amber-300 bg-amber-50 p-5 shadow-sm">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-700">Duplicate detected</p>
-      <p className="mt-3 text-xl font-black text-stone-900">{book.title || "Untitled book"}</p>
-      <p className="mt-2 text-sm text-stone-600">{book.authors || "Unknown author"}</p>
-      <p className="mt-1 text-sm text-stone-600">Current quantity: {book.quantity}</p>
-      <div className="mt-4 flex flex-col gap-3">
-        <Button disabled={busy} type="button" onClick={() => void onAddCopy()}>
-          {busy ? "Updating..." : "Add Another Copy"}
-        </Button>
-        <Button disabled={busy} type="button" variant="secondary" onClick={onOpenRecord}>
-          Open Existing Record
-        </Button>
-        <Button disabled={busy} type="button" variant="ghost" onClick={onCancel}>
+    <div className="flex flex-col gap-3 rounded-xl border border-primary/20 bg-white/90 p-4 shadow-xl backdrop-blur-md">
+      <p className="text-sm font-semibold leading-tight text-slate-800">
+        Duplicate ISBN detected in this batch.
+      </p>
+      {book.title && (
+        <p className="text-xs text-slate-500">
+          {book.title}{book.authors ? ` — ${book.authors}` : ""} (Qty: {book.quantity})
+        </p>
+      )}
+      <div className="flex gap-2">
+        <button
+          disabled={busy}
+          type="button"
+          onClick={() => void onAddCopy()}
+          className="flex h-9 flex-1 items-center justify-center rounded-lg bg-primary text-[11px] font-bold uppercase tracking-wider text-white shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+        >
+          {busy ? "Updating..." : "Add Another"}
+        </button>
+        <button
+          disabled={busy}
+          type="button"
+          onClick={onOpenRecord}
+          className="flex h-9 flex-1 items-center justify-center rounded-lg bg-primary/10 text-[11px] font-bold uppercase tracking-wider text-primary transition-colors hover:bg-primary/20 disabled:opacity-50"
+        >
+          Open Record
+        </button>
+        <button
+          disabled={busy}
+          type="button"
+          onClick={onCancel}
+          className="flex h-9 items-center justify-center rounded-lg border border-slate-300 px-3 text-[11px] font-bold uppercase text-slate-600 transition-colors hover:bg-slate-100 disabled:opacity-50"
+        >
           Cancel
-        </Button>
+        </button>
       </div>
     </div>
   );

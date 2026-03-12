@@ -149,18 +149,24 @@ export function BarcodeScanner({
   }, [paused]);
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="overflow-hidden rounded-[2rem] border border-line bg-ink shadow-card">
-        <div id={elementId} className="min-h-[22rem] bg-neutral-950" />
-      </div>
-      <p className="text-sm text-muted">
-        {status === "loading" && "Starting camera..."}
-        {status === "ready" &&
-          "Aim at the barcode on the back cover, fill most of the frame width, and hold 6 to 10 inches away. Move slowly closer if the code is small."}
-        {status === "denied" && "Camera access was denied. Use manual ISBN entry below."}
-        {status === "unsupported" && "Camera scanning is unavailable in this browser. Use manual ISBN entry below."}
-        {status === "error" && "Camera could not be started. Use manual ISBN entry below."}
-      </p>
+    <div className="absolute inset-0 z-0">
+      {/* Camera fills entire area behind overlays */}
+      <div id={elementId} className="h-full w-full bg-slate-900" />
+
+      {/* Dark gradient vignette */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
+
+      {/* Status text overlay */}
+      {status !== "ready" && (
+        <div className="absolute inset-x-0 bottom-8 z-20 text-center">
+          <p className="text-sm font-medium text-white/80">
+            {status === "loading" && "Starting camera..."}
+            {status === "denied" && "Camera access was denied. Use manual ISBN entry."}
+            {status === "unsupported" && "Camera unavailable. Use manual ISBN entry."}
+            {status === "error" && "Camera could not start. Use manual ISBN entry."}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

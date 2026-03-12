@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -54,6 +55,7 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
   const [message, setMessage] = useState(saved ? "Book saved. Ready for the next scan." : "");
   const [permissionState, setPermissionState] = useState<PermissionState>("loading");
   const [duplicateBook, setDuplicateBook] = useState<Book | null>(null);
+  const [showManual, setShowManual] = useState(false);
   const lastHandledRef = useRef<string>("");
 
   useEffect(() => {
@@ -154,41 +156,88 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      {/* Scanner heading card */}
-      <div className="rounded-xl border border-primary/5 bg-white p-4 shadow-card">
-        <p className="text-xs font-bold uppercase tracking-widest text-primary">Scanner</p>
-        <p className="mt-1 text-lg font-bold text-charcoal">
-          {activeBatch?.name ?? "No active batch selected"}
-        </p>
-        <p className="mt-1 text-sm text-slate-500">
-          {permissionState === "ready"
-            ? "Camera scan is live. Try the barcode on the back cover first, then fall back to manual entry if the cover is glossy or damaged."
-            : "If camera access fails, volunteers can keep moving with manual ISBN entry."}
-        </p>
-      </div>
-
-      <BarcodeScanner paused={busy || Boolean(duplicateBook)} onDetected={submitIsbn} onPermissionState={setPermissionState} />
-
-      {duplicateBook ? (
-        <DuplicateModal
-          book={duplicateBook}
-          busy={busy}
-          onAddCopy={handleAddCopy}
-          onOpenRecord={handleOpenRecord}
-          onCancel={handleCancelDuplicate}
+    <div className="relative flex flex-1 flex-col bg-slate-800">
+      {/* ── Full-screen camera area ── */}
+      <div className="relative flex-1">
+        {/* Camera viewfinder */}
+        <BarcodeScanner
+          paused={busy || Boolean(duplicateBook)}
+          onDetected={submitIsbn}
+          onPermissionState={setPermissionState}
         />
-      ) : null}
 
-      {/* Manual entry */}
-      <div className="rounded-xl border border-primary/5 bg-white p-4 shadow-card">
-        <p className="mb-2 text-sm font-semibold text-charcoal">Manual fallback</p>
-        <ManualEntry disabled={busy || Boolean(duplicateBook)} onSubmitIsbn={submitIsbn} />
+        {/* Scanning frame overlay */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-8">
+          <div className="relative h-64 w-full max-w-md overflow-hidden rounded-xl border-2 border-primary/50">
+            {/* Corner brackets */}
+            <div className="absolute left-0 top-0 h-8 w-8 border-l-4 border-t-4 border-primary" />
+            <div className="absolute right-0 top-0 h-8 w-8 border-r-4 border-t-4 border-primary" />
+            <div className="absolute bottom-0 left-0 h-8 w-8 border-b-4 border-l-4 border-primary" />
+            <div className="absolute bottom-0 right-0 h-8 w-8 border-b-4 border-r-4 border-primary" />
+            {/* Scanning line */}
+            <div className="absolute left-0 right-0 top-1/2 h-0.5 bg-primary shadow-[0_0_15px_#9b2234]" />
+          </div>
+        </div>
       </div>
 
-      {busy ? <StatusBanner tone="info">Processing scan...</StatusBanner> : null}
-      {message ? <StatusBanner tone="success">{message}</StatusBanner> : null}
-      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
+      {/* ── Lower controls ── */}
+      <div className="relative z-10 flex flex-col gap-3 bg-gradient-to-t from-black/80 to-transparent px-4 pb-4 pt-6">
+        {/* Status messages */}
+        {busy && <StatusBanner tone="info">Processing scan...</StatusBanner>}
+        {message && <StatusBanner tone="success">{message}</StatusBanner>}
+        {error && <StatusBanner tone="error">{error}</StatusBanner>}
+
+        {/* Duplicate modal */}
+        {duplicateBook && (
+          <DuplicateModal
+            book={duplicateBook}
+            busy={busy}
+            onAddCopy={handleAddCopy}
+            onOpenRecord={handleOpenRecord}
+            onCancel={handleCancelDuplicate}
+          />
+        )}
+
+        {/* Manual entry toggle */}
+        {showManual ? (
+          <div className="rounded-xl border border-primary/20 bg-white/90 p-4 shadow-xl backdrop-blur-md">
+            <ManualEntry
+              disabled={busy || Boolean(duplicateBook)}
+              onSubmitIsbn={(isbn) => {
+                setShowManual(false);
+                return submitIsbn(isbn);
+              }}
+            />
+          </div>
+        ) : null}
+
+        {/* Quick actions bar */}
+        <div className="flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setShowManual(!showManual)}
+            className="flex items-center gap-2 rounded-full border border-primary/40 px-4 py-2 text-xs font-bold text-primary transition-colors hover:bg-primary/5"
+          >
+            <Icon name="keyboard" size="text-lg" />
+            Manual ISBN Entry
+          </button>
+          <Link
+            href="/inventory"
+            className="flex items-center gap-1 text-xs font-semibold text-slate-400 transition-colors hover:text-primary"
+          >
+            Review &amp; Finish
+            <Icon name="chevron_right" size="text-sm" />
+          </Link>
+        </div>
+
+        {/* Batch progress */}
+        <div className="flex justify-center">
+          <p className="text-[10px] font-medium uppercase tracking-widest text-slate-400">
+            {permissionState === "ready" ? "Scanning active" : "Waiting for camera"}{" "}
+            • {activeBatch?.name ?? "No batch"}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
