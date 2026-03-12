@@ -16,7 +16,7 @@ export function Button({
   return (
     <button
       className={cn(
-        "min-h-14 rounded-3xl border px-5 text-base font-semibold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50",
+        "min-h-14 rounded-3xl border px-5 text-base font-semibold transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-emerald-200",
         fullWidth && "w-full",
         variant === "primary" && "border-accentDark bg-accent text-ink shadow-card",
         variant === "secondary" && "border-line bg-sand text-ink",
@@ -27,4 +27,3 @@ export function Button({
     />
   );
 }
-

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { BookListItem } from "@/components/book-list-item";
 import { Card } from "@/components/ui/card";
+import { StatusBanner } from "@/components/ui/status-banner";
 import { FieldShell, SelectInput, TextInput } from "@/components/ui/field";
 import { useActiveBatch } from "@/hooks/use-active-batch";
 import { BIN_LABELS, Book, INTAKE_STATUSES } from "@/types";
@@ -98,15 +99,15 @@ export function InventoryClient() {
         ) : null}
       </Card>
 
-      {loading ? <Card className="rounded-3xl border-stone-200 bg-white shadow-sm">Loading inventory...</Card> : null}
-      {error ? <Card className="rounded-3xl border-stone-200 bg-white text-red-700 shadow-sm">{error}</Card> : null}
+      {loading ? <StatusBanner tone="info">Loading inventory...</StatusBanner> : null}
+      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
 
       {!loading && !error ? (
         <div className="flex flex-col gap-3">
           {books.length > 0 ? (
             books.map((book) => <BookListItem key={book.id} book={book} />)
           ) : (
-            <Card className="rounded-3xl border-stone-200 bg-white shadow-sm">
+            <Card className="rounded-3xl border-stone-200 bg-white text-stone-600 shadow-sm">
               No books found for this batch and filter combination.
             </Card>
           )}

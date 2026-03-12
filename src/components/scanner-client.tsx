@@ -7,6 +7,7 @@ import { BarcodeScanner } from "@/components/scanner/barcode-scanner";
 import { DuplicateModal } from "@/components/scanner/duplicate-modal";
 import { ManualEntry } from "@/components/scanner/manual-entry";
 import { Card } from "@/components/ui/card";
+import { StatusBanner } from "@/components/ui/status-banner";
 import { useActiveBatch } from "@/hooks/use-active-batch";
 import { Book } from "@/types";
 
@@ -181,8 +182,9 @@ export function ScannerClient({ saved = false }: { saved?: boolean }) {
         <ManualEntry disabled={busy || Boolean(duplicateBook)} onSubmitIsbn={submitIsbn} />
       </Card>
 
-      {message ? <p className="rounded-3xl bg-moss px-4 py-3 text-sm font-semibold text-white">{message}</p> : null}
-      {error ? <p className="rounded-3xl bg-red-100 px-4 py-3 text-sm font-semibold text-red-700">{error}</p> : null}
+      {busy ? <StatusBanner tone="info">Processing scan...</StatusBanner> : null}
+      {message ? <StatusBanner tone="success">{message}</StatusBanner> : null}
+      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
     </div>
   );
 }

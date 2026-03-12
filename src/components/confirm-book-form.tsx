@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { StatusBanner } from "@/components/ui/status-banner";
 import { FieldShell, SelectInput, TextArea, TextInput } from "@/components/ui/field";
 import { BIN_LABELS, INTAKE_STATUSES } from "@/types";
 
@@ -136,14 +137,12 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">Scanned ISBN</p>
         <p className="mt-2 text-lg font-semibold text-stone-900">{draft.isbn13 ?? draft.isbn10 ?? draft.normalizedIsbn}</p>
       </div>
-      {metadataState === "loading" ? (
-        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">Looking up book details...</p>
-      ) : null}
+      {metadataState === "loading" ? <StatusBanner tone="info">Looking up book details...</StatusBanner> : null}
       {metadataState === "empty" ? (
-        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">No metadata found. You can still save this book.</p>
+        <StatusBanner tone="warning">No metadata found. You can still save this book.</StatusBanner>
       ) : null}
       {metadataState === "error" ? (
-        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">Metadata lookup failed. You can still save this book.</p>
+        <StatusBanner tone="warning">Metadata lookup failed. You can still save this book.</StatusBanner>
       ) : null}
       <FieldShell label="Bin label">
         <SelectInput name="binLabel" value={binLabel} onChange={(event) => setBinLabel(event.target.value)} required>
@@ -201,7 +200,7 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
       <FieldShell label="Notes">
         <TextArea name="notes" value={notes} onChange={(event) => setNotes(event.target.value)} placeholder="Optional intake note" />
       </FieldShell>
-      {error ? <p className="text-sm font-medium text-red-700">{error}</p> : null}
+      {error ? <StatusBanner tone="error">{error}</StatusBanner> : null}
       <Button disabled={saving} type="submit">
         {saving ? "Saving..." : "Save + Scan Next"}
       </Button>

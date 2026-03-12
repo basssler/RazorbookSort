@@ -16,6 +16,8 @@ body {
   background: #f7f7f5;
   color: #1c1917;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 a {
@@ -28,6 +30,19 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(5, 150, 105, 0.35);
+  outline-offset: 2px;
 }
 
 video {

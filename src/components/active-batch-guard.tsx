@@ -3,6 +3,7 @@
 import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+import { StatusBanner } from "@/components/ui/status-banner";
 import { useActiveBatch } from "@/hooks/use-active-batch";
 
 export function ActiveBatchGuard({ children }: { children: ReactNode }) {
@@ -16,11 +17,11 @@ export function ActiveBatchGuard({ children }: { children: ReactNode }) {
   }, [activeBatch, hasHydrated, router]);
 
   if (!hasHydrated) {
-    return <p className="px-2 py-6 text-sm text-stone-600">Loading active batch...</p>;
+    return <StatusBanner tone="info">Loading active batch...</StatusBanner>;
   }
 
   if (!activeBatch) {
-    return <p className="px-2 py-6 text-sm text-stone-600">Redirecting to batch selection...</p>;
+    return <StatusBanner tone="warning">Redirecting to batch selection...</StatusBanner>;
   }
 
   return <>{children}</>;
