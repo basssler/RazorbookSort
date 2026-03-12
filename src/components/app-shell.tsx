@@ -50,7 +50,7 @@ export function AppShell({
               <Icon name="menu" />
             </button>
           )}
-          <h1 className="text-lg font-bold leading-tight tracking-tight text-charcoal">
+          <h1 className="text-xl font-bold leading-tight tracking-tight text-charcoal">
             {title}
           </h1>
         </div>
