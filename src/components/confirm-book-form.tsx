@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { FieldShell, SelectInput, TextArea, TextInput } from "@/components/ui/field";
@@ -34,6 +34,58 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
   const [notes, setNotes] = useState(draft.notes);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [metadataState, setMetadataState] = useState<"idle" | "loading" | "loaded" | "empty" | "error">("idle");
+
+  useEffect(() => {
+    let active = true;
+
+    async function lookupMetadata() {
+      if (!draft.normalizedIsbn) {
+        return;
+      }
+
+      setMetadataState("loading");
+
+      try {
+        const response = await fetch(`/api/metadata?isbn=${encodeURIComponent(draft.normalizedIsbn)}`, {
+          cache: "no-store",
+        });
+        const payload = await response.json();
+
+        if (!active) {
+          return;
+        }
+
+        if (!response.ok) {
+          setMetadataState("error");
+          return;
+        }
+
+        const metadata = payload.metadata;
+        if (!metadata) {
+          setMetadataState("empty");
+          return;
+        }
+
+        setTitle((current) => current || metadata.title || "");
+        setAuthors((current) => current || metadata.authors || "");
+        setPublisher((current) => current || metadata.publisher || "");
+        setPublishedYear((current) => current || metadata.publishedYear || "");
+        setThumbnailUrl((current) => current || metadata.thumbnailUrl || "");
+        setMetadataState("loaded");
+      } catch {
+        if (active) {
+          setMetadataState("error");
+        }
+      }
+    }
+
+    void lookupMetadata();
+
+    return () => {
+      active = false;
+    };
+  }, [draft.normalizedIsbn]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -84,6 +136,15 @@ export function ConfirmBookForm({ draft }: { draft: Draft }) {
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">Scanned ISBN</p>
         <p className="mt-2 text-lg font-semibold text-stone-900">{draft.isbn13 ?? draft.isbn10 ?? draft.normalizedIsbn}</p>
       </div>
+      {metadataState === "loading" ? (
+        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">Looking up book details...</p>
+      ) : null}
+      {metadataState === "empty" ? (
+        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">No metadata found. You can still save this book.</p>
+      ) : null}
+      {metadataState === "error" ? (
+        <p className="rounded-2xl bg-stone-100 px-4 py-3 text-sm text-stone-600">Metadata lookup failed. You can still save this book.</p>
+      ) : null}
       <FieldShell label="Bin label">
         <SelectInput name="binLabel" value={binLabel} onChange={(event) => setBinLabel(event.target.value)} required>
           <option value="">Select bin label</option>

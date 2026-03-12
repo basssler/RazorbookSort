@@ -35,6 +35,7 @@ declare namespace __next_route_internal_types__ {
     | `/`
     | `/api/batches`
     | `/api/books`
+    | `/api/metadata`
     | `/api/scan`
     | `/confirm`
     | `/inventory`
