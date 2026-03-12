@@ -23,6 +23,21 @@ type UpdateBookInput = {
   notes: string;
 };
 
+type CreateBookInput = {
+  batchId: string;
+  isbn10: string | null;
+  isbn13: string | null;
+  title: string;
+  authors: string;
+  publisher: string;
+  publishedYear: number | null;
+  thumbnailUrl: string;
+  binLabel: string;
+  intakeStatus: string;
+  quantity: number;
+  notes: string;
+};
+
 export async function listBooksByBatch(options: ListBooksOptions) {
   const supabase = createSupabaseServerClient();
   let query = supabase.from("books").select("*").eq("batch_id", options.batchId).order("updated_at", { ascending: false });
@@ -52,6 +67,91 @@ export async function listBooksByBatch(options: ListBooksOptions) {
 export async function getBookById(id: string) {
   const supabase = createSupabaseServerClient();
   const { data, error } = await supabase.from("books").select("*").eq("id", id).single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as Book;
+}
+
+export async function findDuplicateBookForBatch(options: { batchId: string; isbn10?: string | null; isbn13?: string | null }) {
+  const supabase = createSupabaseServerClient();
+
+  if (options.isbn13) {
+    const { data, error } = await supabase
+      .from("books")
+      .select("*")
+      .eq("batch_id", options.batchId)
+      .eq("isbn_13", options.isbn13)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (data) {
+      return data as Book;
+    }
+  }
+
+  if (options.isbn10) {
+    const { data, error } = await supabase
+      .from("books")
+      .select("*")
+      .eq("batch_id", options.batchId)
+      .eq("isbn_10", options.isbn10)
+      .maybeSingle();
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (data) {
+      return data as Book;
+    }
+  }
+
+  return null;
+}
+
+export async function incrementBookQuantityById(id: string) {
+  const book = await getBookById(id);
+  const supabase = createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("books")
+    .update({ quantity: book.quantity + 1 })
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as Book;
+}
+
+export async function createBookRecord(input: CreateBookInput) {
+  const supabase = createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("books")
+    .insert({
+      batch_id: input.batchId,
+      isbn_10: input.isbn10,
+      isbn_13: input.isbn13,
+      title: input.title.trim() || null,
+      authors: input.authors.trim() || null,
+      publisher: input.publisher.trim() || null,
+      published_year: input.publishedYear,
+      thumbnail_url: input.thumbnailUrl.trim() || null,
+      bin_label: input.binLabel.trim() || null,
+      intake_status: input.intakeStatus.trim() || null,
+      quantity: Math.max(1, input.quantity),
+      notes: input.notes.trim() || null,
+    })
+    .select("*")
+    .single();
 
   if (error) {
     throw new Error(error.message);

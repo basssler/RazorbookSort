@@ -4,9 +4,11 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { BarcodeScanner } from "@/components/scanner/barcode-scanner";
+import { DuplicateModal } from "@/components/scanner/duplicate-modal";
 import { ManualEntry } from "@/components/scanner/manual-entry";
 import { Card } from "@/components/ui/card";
 import { useActiveBatch } from "@/hooks/use-active-batch";
+import { Book } from "@/types";
 
 type PermissionState = "loading" | "ready" | "denied" | "unsupported" | "error";
 
@@ -15,7 +17,9 @@ function playSuccessBeep() {
     return;
   }
 
-  const AudioContextCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const AudioContextCtor =
+    window.AudioContext ||
+    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!AudioContextCtor) {
     return;
   }
@@ -46,30 +50,29 @@ export function ScannerClient() {
   const { activeBatch } = useActiveBatch();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [permissionState, setPermissionState] = useState<PermissionState>("loading");
+  const [duplicateBook, setDuplicateBook] = useState<Book | null>(null);
   const lastHandledRef = useRef<string>("");
 
   useEffect(() => {
     lastHandledRef.current = "";
+    setDuplicateBook(null);
   }, [activeBatch?.id]);
 
   async function submitIsbn(rawIsbn: string) {
-    if (!activeBatch) {
-      setError("Select an active batch before scanning.");
-      return;
-    }
-
-    if (busy) {
+    if (!activeBatch || busy || duplicateBook) {
       return;
     }
 
     setBusy(true);
     setError("");
+    setMessage("");
 
     const response = await fetch("/api/scan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ isbn: rawIsbn }),
+      body: JSON.stringify({ isbn: rawIsbn, batchId: activeBatch.id }),
     });
 
     const payload = await response.json();
@@ -77,6 +80,11 @@ export function ScannerClient() {
 
     if (!response.ok) {
       setError(payload.error ?? "Unable to process this ISBN.");
+      return;
+    }
+
+    if (payload.mode === "duplicate") {
+      setDuplicateBook(payload.book as Book);
       return;
     }
 
@@ -102,6 +110,45 @@ export function ScannerClient() {
     router.push(`/confirm?${params.toString()}`);
   }
 
+  async function handleAddCopy() {
+    if (!duplicateBook) {
+      return;
+    }
+
+    setBusy(true);
+    setError("");
+    setMessage("");
+
+    const response = await fetch(`/api/books/${duplicateBook.id}/increment`, {
+      method: "POST",
+    });
+    const payload = await response.json();
+    setBusy(false);
+
+    if (!response.ok) {
+      setError(payload.error ?? "Unable to increment quantity.");
+      return;
+    }
+
+    setDuplicateBook(null);
+    setMessage(`Added another copy to ${payload.book.title || "the existing record"}.`);
+    lastHandledRef.current = "";
+  }
+
+  function handleOpenRecord() {
+    if (!duplicateBook) {
+      return;
+    }
+
+    router.push(`/books/${duplicateBook.id}/edit`);
+  }
+
+  function handleCancelDuplicate() {
+    setDuplicateBook(null);
+    setMessage("Duplicate dismissed. Ready to keep scanning.");
+    lastHandledRef.current = "";
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Card className="flex flex-col gap-3 rounded-3xl border-stone-200 bg-white shadow-sm">
@@ -114,13 +161,24 @@ export function ScannerClient() {
         </p>
       </Card>
 
-      <BarcodeScanner paused={busy} onDetected={submitIsbn} onPermissionState={setPermissionState} />
+      <BarcodeScanner paused={busy || Boolean(duplicateBook)} onDetected={submitIsbn} onPermissionState={setPermissionState} />
+
+      {duplicateBook ? (
+        <DuplicateModal
+          book={duplicateBook}
+          busy={busy}
+          onAddCopy={handleAddCopy}
+          onOpenRecord={handleOpenRecord}
+          onCancel={handleCancelDuplicate}
+        />
+      ) : null}
 
       <Card className="flex flex-col gap-4 rounded-3xl border-stone-200 bg-white shadow-sm">
         <p className="text-sm font-semibold text-ink">Manual fallback</p>
-        <ManualEntry disabled={busy} onSubmitIsbn={submitIsbn} />
+        <ManualEntry disabled={busy || Boolean(duplicateBook)} onSubmitIsbn={submitIsbn} />
       </Card>
 
+      {message ? <p className="rounded-3xl bg-moss px-4 py-3 text-sm font-semibold text-white">{message}</p> : null}
       {error ? <p className="rounded-3xl bg-red-100 px-4 py-3 text-sm font-semibold text-red-700">{error}</p> : null}
     </div>
   );

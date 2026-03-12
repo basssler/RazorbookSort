@@ -1,6 +1,13 @@
 import { LookupResponse } from "@/lib/app-types";
 import { createBatch, getBatchById, listBatches } from "@/services/batches";
-import { getBookById, listBooksByBatch, updateBookById } from "@/services/books";
+import {
+  createBookRecord,
+  findDuplicateBookForBatch,
+  getBookById,
+  incrementBookQuantityById,
+  listBooksByBatch,
+  updateBookById,
+} from "@/services/books";
 import { Book } from "@/types";
 
 export { createBatch, getBatchById, listBatches };
@@ -28,15 +35,45 @@ export async function getBook(id: string) {
 }
 
 export async function lookupIsbnForBatch(_: string, __: string): Promise<LookupResponse> {
-  throw new Error("Duplicate lookup is not implemented until milestone 5.");
+  throw new Error("Duplicate lookup is handled by the scan API.");
 }
 
-export async function incrementBookQuantity(_: string): Promise<Book> {
-  throw new Error("Duplicate quantity increment is not implemented until milestone 5.");
+export async function findDuplicateBook(input: { batchId: string; isbn10?: string | null; isbn13?: string | null }) {
+  return findDuplicateBookForBatch(input);
 }
 
-export async function createBook(_: unknown): Promise<Book> {
-  throw new Error("Book creation is not implemented until milestone 6.");
+export async function incrementBookQuantity(id: string): Promise<Book> {
+  return incrementBookQuantityById(id);
+}
+
+export async function createBook(input: {
+  batchId: string;
+  isbn10: string | null;
+  isbn13: string | null;
+  title?: string;
+  authors?: string;
+  publisher?: string;
+  publishedYear?: number | null;
+  thumbnailUrl?: string;
+  binLabel?: string;
+  intakeStatus?: string;
+  quantity?: number;
+  notes?: string;
+}): Promise<Book> {
+  return createBookRecord({
+    batchId: input.batchId,
+    isbn10: input.isbn10,
+    isbn13: input.isbn13,
+    title: input.title ?? "",
+    authors: input.authors ?? "",
+    publisher: input.publisher ?? "",
+    publishedYear: input.publishedYear ?? null,
+    thumbnailUrl: input.thumbnailUrl ?? "",
+    binLabel: input.binLabel ?? "",
+    intakeStatus: input.intakeStatus ?? "",
+    quantity: input.quantity ?? 1,
+    notes: input.notes ?? "",
+  });
 }
 
 export async function updateBook(input: {
