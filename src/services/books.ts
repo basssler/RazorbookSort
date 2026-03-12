@@ -1,4 +1,6 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { getBatchById } from "@/services/batches";
+import { buildBatchCsv } from "@/services/export";
 import { Book } from "@/types";
 
 type ListBooksOptions = {
@@ -194,4 +196,19 @@ export async function updateBookById(input: UpdateBookInput) {
   }
 
   return data as Book;
+}
+
+export async function exportBatchBooksCsv(batchId: string) {
+  const [batch, books] = await Promise.all([
+    getBatchById(batchId),
+    listBooksByBatch({ batchId }),
+  ]);
+
+  const formattedDate = new Date().toISOString().slice(0, 10);
+  const safeBatchName = batch.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+  return {
+    filename: `${safeBatchName || "batch"}-${formattedDate}.csv`,
+    content: buildBatchCsv(books),
+  };
 }

@@ -88,6 +88,14 @@ export function InventoryClient() {
             </SelectInput>
           </FieldShell>
         </div>
+        {activeBatch ? (
+          <a
+            href={`/api/batches/${activeBatch.id}/export`}
+            className="flex min-h-12 items-center justify-center rounded-2xl bg-emerald-600 px-4 text-sm font-semibold text-white"
+          >
+            Export CSV
+          </a>
+        ) : null}
       </Card>
 
       {loading ? <Card className="rounded-3xl border-stone-200 bg-white shadow-sm">Loading inventory...</Card> : null}

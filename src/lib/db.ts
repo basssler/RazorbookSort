@@ -2,6 +2,7 @@ import { LookupResponse } from "@/lib/app-types";
 import { createBatch, getBatchById, listBatches } from "@/services/batches";
 import {
   createBookRecord,
+  exportBatchBooksCsv,
   findDuplicateBookForBatch,
   getBookById,
   incrementBookQuantityById,
@@ -106,6 +107,6 @@ export async function updateBook(input: {
   });
 }
 
-export async function exportBatchCsv(_: string): Promise<{ filename: string; content: string }> {
-  throw new Error("CSV export is not implemented until milestone 8.");
+export async function exportBatchCsv(batchId: string): Promise<{ filename: string; content: string }> {
+  return exportBatchBooksCsv(batchId);
 }
