@@ -109,7 +109,7 @@ export function ScannerClient() {
         <p className="text-xl font-black text-ink">{activeBatch?.name ?? "No active batch selected"}</p>
         <p className="text-sm text-muted">
           {permissionState === "ready"
-            ? "Camera scan is live. You can also enter an ISBN manually."
+            ? "Camera scan is live. Try the barcode on the back cover first, then fall back to manual entry if the cover is glossy or damaged."
             : "If camera access fails, volunteers can keep moving with manual ISBN entry."}
         </p>
       </Card>

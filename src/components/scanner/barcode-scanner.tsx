@@ -8,7 +8,15 @@ const SCAN_FORMATS = [
   Html5QrcodeSupportedFormats.EAN_8,
   Html5QrcodeSupportedFormats.UPC_A,
   Html5QrcodeSupportedFormats.UPC_E,
+  Html5QrcodeSupportedFormats.CODE_128,
+  Html5QrcodeSupportedFormats.CODE_39,
 ] as const;
+
+function getScanBox(viewfinderWidth: number, viewfinderHeight: number) {
+  const width = Math.max(280, Math.min(Math.floor(viewfinderWidth * 0.9), 420));
+  const height = Math.max(160, Math.min(Math.floor(viewfinderHeight * 0.42), 220));
+  return { width, height };
+}
 
 export function BarcodeScanner({
   paused,
@@ -46,11 +54,15 @@ export function BarcodeScanner({
 
       try {
         await scanner.start(
-          { facingMode: "environment" },
           {
-            fps: 10,
-            qrbox: { width: 240, height: 140 },
-            aspectRatio: 1.333334,
+            facingMode: { ideal: "environment" },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 },
+          },
+          {
+            fps: 14,
+            qrbox: getScanBox,
+            disableFlip: false,
           },
           async (decodedText) => {
             if (lockRef.current || paused) {
@@ -138,7 +150,7 @@ export function BarcodeScanner({
       </div>
       <p className="text-sm text-muted">
         {status === "loading" && "Starting camera..."}
-        {status === "ready" && "Aim the camera at the ISBN barcode."}
+        {status === "ready" && "Aim the camera at the barcode on the back cover. Hold 4 to 8 inches away and keep the bars horizontal in the frame."}
         {status === "denied" && "Camera access was denied. Use manual ISBN entry below."}
         {status === "unsupported" && "Camera scanning is unavailable in this browser. Use manual ISBN entry below."}
         {status === "error" && "Camera could not be started. Use manual ISBN entry below."}
